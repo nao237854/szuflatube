@@ -1,0 +1,30 @@
+/*styles for home content only*/
+@import "../app.style.variables";
+
+nav {
+    color: #FFF;
+    width: 100%;
+    background-color: $primary-color;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0.05rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+     align-items:baseline;
+
+    h3 {
+    color: inherit;
+    line-height: 4rem;
+    padding-left:12px;
+    text-decoration: none;
+    margin:0
+    }
+    span.version{
+        font-size: 9px;
+    }
+}
+
+
+li.playlist-item{
+border-bottom:1px solid #D5D5D5;
+}

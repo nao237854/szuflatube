@@ -1,0 +1,17 @@
+
+@import "app.style.variables";
+@import "app.style.mixins";
+@import "app.style.functions";
+
+html, body{
+  height: 100%;
+  margin: 0;
+  background: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.ui-progressbar{
+    .ui-progressbar-value{
+            background: linear-gradient(to bottom, red 0%,violet 100%);
+    }
+}
