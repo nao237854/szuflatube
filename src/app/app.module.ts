@@ -19,8 +19,7 @@ import { AppState, InternalStateType } from './app.service';
 import { PlaylistComponent } from './playlist';
 import { NoContentComponent } from './no-content';
 
-
-import { MapToIterable } from './app.pipes'; 
+import { MapToIterable } from './app.pipes';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -40,7 +39,7 @@ interface StoreType {
 @NgModule({
   bootstrap: [ AppComponent ],
   declarations: [
-    AppComponent,PlaylistComponent,NoContentComponent,
+    AppComponent, PlaylistComponent, NoContentComponent,
     MapToIterable
   ],
   /**

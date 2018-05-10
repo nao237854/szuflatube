@@ -48,6 +48,7 @@ module.exports = {
     /** <link> tags for a PrimeNG **/
     { rel: "stylesheet", type:"text/css", href: "./assets/primeng/primeng.min.css" },
     { rel: "stylesheet", type:"text/css", href: "./assets/primeng/resources/themes/omega/theme.css" },
+    { rel: 'stylesheet', href: '/assets/font-awesome/css/font-awesome.min.css' }
 
   ],
   meta: [

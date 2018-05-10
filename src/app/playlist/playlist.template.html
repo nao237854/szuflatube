@@ -1,23 +1,27 @@
-
-
-
 <nav>
-    <h3>SzuflaTube</h3><span class="version">v0.0.1</span>
+	<h3>SzuflaTube</h3><span class="version">v0.0.1</span>
 </nav>
 
 <p-dataScroller [value]="playlist" [rows]="10" [inline]="true" scrollHeight="{{leftHeight}}">
-    <ng-template let-item pTemplate="item">
-  <li class="playlist-item">
-            <div class="ui-grid ui-grid-responsive ui-fluid" style="font-size:16px;padding:20px">
-                <div class="ui-grid-row">
-                    <div class="ui-grid-col-3" style="text-align:center">
-                        <img src="{{item.snippet.thumbnails.default.url}}">
-                        </div>
-                    <div class="ui-grid-col-9">
-                            {{item.snippet.title}}
-                    </div>
-                </div>
-            </div>
-        </li>
-    </ng-template>
+	<ng-template let-playlistItem pTemplate="item">
+		<li class="playlist__item">
+			<div class="ui-grid ui-grid-responsive ui-fluid">
+				<div class="ui-grid-row playlist__itemwrapper">
+					<div (click)="thubnailBehaviour(playlistItem)" class="ui-grid-col-3">
+						<div class="playlist__thumbnail">
+							<img src="{{playlistItem.snippet.thumbnails.default.url}}">
+							<div class="thumbnail__overlay">
+								<i class="fa fa-{{playlistItem.snippet.thumbnails.overlayIcon || 'play'}}" aria-hidden="true"></i>
+							</div>
+						</div>
+					</div>
+					<div class="ui-grid-col-6">
+						{{playlistItem.snippet.title}}
+					</div>
+				</div>
+			</div>
+		</li>
+	</ng-template>
 </p-dataScroller>
+
+<object id="youtube__frame"></object>

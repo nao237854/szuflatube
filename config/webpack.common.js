@@ -241,6 +241,14 @@ module.exports = function (options) {
         {
           from: 'node_modules/primeng/resources/images',
           to: 'assets/primeng/resources/images'
+        },
+        {
+          from: 'node_modules/font-awesome/css/font-awesome.min.css',
+          to: 'assets/font-awesome/css/font-awesome.min.css'
+        },
+        {
+          from: 'node_modules/font-awesome/fonts',
+          to: 'assets/font-awesome/fonts'
         }
       ],
         isProd ? { ignore: ['mock-data/**/*'] } : undefined
