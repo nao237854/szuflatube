@@ -9,9 +9,10 @@
 		<i class="fa fa-{{playerPlayIcon}} controlbar__play" (click)="play()" aria-hidden="true"></i>
 		<i class="fa fa-step-forward controlbar__next" (click)="next()" aria-hidden="true"></i>
 		<div class="controlbar__progressbar">
-			<span class="controlbar__duration">{{progressCurrentTime | date : 'HH:mm:ss'}} / {{progressDuration | date : 'HH:mm:ss'}}</span>
+			<span *ngIf="progressCurrentTime" class="controlbar__duration">{{progressCurrentTime | date : 'HH:mm:ss'}} / {{progressDuration | date : 'HH:mm:ss'}}</span>
 			<p-progressBar [showValue]="false" [value]="progressValue"></p-progressBar>
 		</div>
+		<i class="fa fa-random controlbar__shuffle" (click)="shufflePlaylist()" aria-hidden="true"></i>
 
 		
 	</div>

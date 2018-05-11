@@ -77,7 +77,7 @@ export class PlaylistComponent {
     this.player = YouTubePlayer('youtube__frame');
 
     this.player.on('stateChange', (event) => {
-      if (this.playListBuffer.getPrevious() != -1) {
+      if (this.playListBuffer.getPrevious() !== -1) {
         this.playerPlayIcon = 'play';
         this.playlist[this.playListBuffer.getPrevious()]['snippet'].thumbnails.overlayIcon = 'play';
       }
@@ -88,22 +88,19 @@ export class PlaylistComponent {
           this.progressInterval = setInterval(() => {
             this.player.getCurrentTime().then((currentTime) => {
               this.player.getDuration().then((duration) => {
+                if (duration) {
+                  this.progressValue = (currentTime / duration) * 100;
 
-                this.progressValue = (currentTime / duration) * 100;
+                  this.progressDuration = new Date(1970, 0, 1); // Epoch
+                  this.progressDuration.setSeconds(duration);
 
-                let tempDuration = new Date(1970, 0, 1); // Epoch
-                tempDuration.setSeconds(duration);
-
-                let tempCurrentTime = new Date(1970, 0, 1); // Epoch
-                tempCurrentTime.setSeconds(currentTime);
-
-                this.progressDuration = tempDuration;
-                this.progressCurrentTime = tempCurrentTime;
+                  this.progressCurrentTime = new Date(1970, 0, 1); // Epoch
+                  this.progressCurrentTime.setSeconds(currentTime);
+                }
 
               });
 
-
-            })
+            });
 
           }, 100);
           break;
@@ -196,6 +193,18 @@ export class PlaylistComponent {
 
   }
 
+  private shufflePlaylist() {
+    this.playlist = _.shuffle(this.playlist);
+    this.playListBuffer.add(-1);
+    this.playListBuffer.add(0);
+    this.player.loadVideoById(this.playlist[this.playListBuffer.getCurrent()]
+    ['contentDetails'].videoId);
+    this.player.stopVideo();
+    this.progressValue = 0;
+    this.progressDuration = new Date(1970, 0, 1);
+    this.progressCurrentTime = new Date(1970, 0, 1);
+  }
+
   private getFullData(config, data: object[] = []) {
 
     this.playlistService.getData(config).subscribe((res: any) => {
@@ -215,7 +224,6 @@ export class PlaylistComponent {
   }
 
 }
-
 
 class PlaylistBuffer {
   private buffer = [-1, -1];
