@@ -118,7 +118,7 @@ export class PlaylistComponent {
 
   }
 
-  private thubnailBehaviour(playlistItem, index) {
+  private playlistItemTileBehaviour(playlistItem, index) {
     if (this.playListBuffer.getCurrent() === index) {
       this.player.getPlayerState().then((res) => {
         //https://developers.google.com/youtube/iframe_api_reference#Functions

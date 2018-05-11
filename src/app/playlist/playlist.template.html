@@ -14,12 +14,12 @@
 
 </nav>
 
-<p-dataScroller [value]="playlist" [rows]="10" [inline]="true" scrollHeight="{{leftHeight}}">
+<p-dataScroller class="playlist" [value]="playlist" [rows]="10" [inline]="true" scrollHeight="{{leftHeight}}">
 	<ng-template let-i="index" let-playlistItem pTemplate="item">
 		<li class="playlist__item">
-			<div class="ui-grid ui-grid-responsive ui-fluid">
+			<div class="ui-grid ui-grid-responsive ui-fluid ui-g-nopad">
 				<div class="ui-grid-row playlist__itemwrapper">
-					<div (click)="thubnailBehaviour(playlistItem, i)" class="ui-g-3">
+					<div (click)="playlistItemTileBehaviour(playlistItem, i)" class="ui-g-3">
 						<div class="playlist__thumbnail">
 							<img src="{{playlistItem.snippet.thumbnails.default.url}}">
 							<div class="thumbnail__overlay">
@@ -27,8 +27,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="ui-g-6">
-						{{playlistItem.snippet.title}}
+					<div (click)="playlistItemTileBehaviour(playlistItem, i)" class="ui-g-6">
+						<span class="playlist__title">{{playlistItem.snippet.title}}</span> 
 					</div>
 				</div>
 			</div>
