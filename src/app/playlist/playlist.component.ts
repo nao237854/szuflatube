@@ -43,6 +43,8 @@ export class PlaylistComponent {
   private progressValue = 0;
   private progressInterval;
 
+  private playerPlayIcon = 'play';
+
   // TypeScript public modifiers
   constructor(public appState: AppState,
     public playlistService: PlaylistService) {
@@ -73,25 +75,28 @@ export class PlaylistComponent {
 
     this.player.on('stateChange', (event) => {
       if (this.playListBuffer.getPrevious() != -1) {
+        this.playerPlayIcon = 'play';
         this.playlist[this.playListBuffer.getPrevious()]['snippet'].thumbnails.overlayIcon = 'play';
       }
       switch (event.data) {
         case 1: {
+          this.playerPlayIcon = 'pause';
           this.playlist[this.playListBuffer.getCurrent()]['snippet'].thumbnails.overlayIcon = 'pause';
           this.progressInterval = setInterval(() => {
             this.player.getCurrentTime().then((currentTime) => {
               this.player.getDuration().then((duration) => {
                 this.progressValue = (currentTime / duration) * 100;
               });
-               
-      
+
+
             })
-        
+
           }, 100);
           break;
         }
         case 2:
         case 0: {
+          this.playerPlayIcon = 'play';
           clearInterval(this.progressInterval);
           this.playlist[this.playListBuffer.getCurrent()]['snippet'].thumbnails.overlayIcon = 'play';
           break;
@@ -142,6 +147,21 @@ export class PlaylistComponent {
       this.player.loadVideoById(playlistItem.contentDetails.videoId);
       this.player.playVideo();
     }
+
+  }
+
+  private play() {
+    if (this.playListBuffer.getPrevious() == -1) {
+      this.playListBuffer.add(0);
+      this.player.loadVideoById(this.playlist[0]['contentDetails'].videoId); 
+    }
+
+    if (this.playerPlayIcon === 'pause') {
+      this.player.pauseVideo();
+    } else {
+      this.player.playVideo();
+    }
+
 
   }
 
