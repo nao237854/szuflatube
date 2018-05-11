@@ -165,7 +165,7 @@ export class PlaylistComponent {
   }
 
   private play() {
-    if (this.playListBuffer.getCurrent()) {
+    if (this.playListBuffer.getCurrent() === -1) {
       this.playListBuffer.add(0);
       this.player.loadVideoById(this.playlist[0]['contentDetails'].videoId); 
     }
