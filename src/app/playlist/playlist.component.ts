@@ -35,6 +35,7 @@ export class PlaylistComponent {
     key: string
   };
   private player = null;
+  private playListBuffer;
 
   private playlist: object[];
   private leftHeight: string;
@@ -63,46 +64,53 @@ export class PlaylistComponent {
       document.getElementsByTagName('nav')[0].clientHeight - 10 + 'px';
     this.getFullData(this.tubeApiConfig);
 
+    this.playListBuffer = new PlaylistBuffer();
+
     this.player = YouTubePlayer('youtube__frame');
+
+    this.player.on('stateChange', (event) => {
+      if (this.playListBuffer.getPrevious() != -1) {
+        this.playlist[this.playListBuffer.getPrevious()]['snippet'].thumbnails.overlayIcon = 'play';
+      }
+      switch (event.data) {
+        case 1: {
+          this.playlist[this.playListBuffer.getCurrent()]['snippet'].thumbnails.overlayIcon = 'pause';
+          break;
+        }
+        case 2:
+        case 0: {
+          this.playlist[this.playListBuffer.getCurrent()]['snippet'].thumbnails.overlayIcon = 'play';
+          break;
+        }
+      }
+    });
 
   }
 
-  private thubnailBehaviour(playlistItem) {
-    this.player.getVideoUrl().then((res) => {
-
-      if (res.includes(playlistItem.contentDetails.videoId)) {
-        this.player.getPlayerState().then((res2) => {
-          //https://developers.google.com/youtube/iframe_api_reference#Functions
-          switch (res2) {
-            case 1: {
-              playlistItem.snippet.thumbnails.overlayIcon = 'play';
-              this.player.pauseVideo();
-              break;
-            }
-            case 2:
-            case 0: {
-              playlistItem.snippet.thumbnails.overlayIcon = 'pause';
-              this.player.playVideo();
-              break;
-            }
+  private thubnailBehaviour(playlistItem, index) {
+    if (this.playListBuffer.getCurrent() === index) {
+      this.player.getPlayerState().then((res) => {
+        //https://developers.google.com/youtube/iframe_api_reference#Functions
+        switch (res) {
+          case 1: {
+            // playlistItem.snippet.thumbnails.overlayIcon = 'play';
+            this.player.pauseVideo();
+            break;
           }
-        });
-      } else {
-
-        const previousItem = _.find(this.playlist, function (item) {
-          return res.includes(item.contentDetails.videoId);
-        });
-
-        if (previousItem) {
-          previousItem.snippet.thumbnails.overlayIcon = 'play';
+          case 2:
+          case 0: {
+            // playlistItem.snippet.thumbnails.overlayIcon = 'pause';
+            this.player.playVideo();
+            break;
+          }
         }
-        playlistItem.snippet.thumbnails.overlayIcon = 'pause';
-
-        this.player.loadVideoById(playlistItem.contentDetails.videoId);
-        this.player.playVideo();
-      }
-
-    }, this);
+      });
+    }
+    else {
+      this.playListBuffer.add(index);
+      this.player.loadVideoById(playlistItem.contentDetails.videoId);
+      this.player.playVideo();
+    }
 
   }
 
@@ -125,4 +133,24 @@ export class PlaylistComponent {
 
   }
 
+}
+
+
+class PlaylistBuffer {
+  private buffer = [-1];
+  constructor() { }
+
+  public add(index) {
+    if (this.buffer.length > 1) {
+      this.buffer.shift();
+    }
+    this.buffer.push(index)
+  }
+
+  public getPrevious() {
+    return this.buffer[0];
+  }
+  public getCurrent() {
+    return this.buffer[1];
+  }
 }

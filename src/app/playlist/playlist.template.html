@@ -3,11 +3,11 @@
 </nav>
 
 <p-dataScroller [value]="playlist" [rows]="10" [inline]="true" scrollHeight="{{leftHeight}}">
-	<ng-template let-playlistItem pTemplate="item">
+	<ng-template let-i="index" let-playlistItem pTemplate="item">
 		<li class="playlist__item">
 			<div class="ui-grid ui-grid-responsive ui-fluid">
 				<div class="ui-grid-row playlist__itemwrapper">
-					<div (click)="thubnailBehaviour(playlistItem)" class="ui-grid-col-3">
+					<div (click)="thubnailBehaviour(playlistItem, i)" class="ui-grid-col-3">
 						<div class="playlist__thumbnail">
 							<img src="{{playlistItem.snippet.thumbnails.default.url}}">
 							<div class="thumbnail__overlay">
