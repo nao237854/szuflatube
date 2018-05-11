@@ -1,86 +1,122 @@
 /*styles for home content only*/
-
 @import "../app.style.variables";
 
 nav {
-	color: #FFF;
-	width: 100%;
-	background-color: $primary-color;
-	font-family: 'Roboto', sans-serif;
-	letter-spacing: 0.05rem;
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-start;
-	align-items: baseline;
+  width: 100%;
+  color: #FFF;
+  background-color: $primary-color;
+  display: flex;
 
-	h3 {
-		color: inherit;
-		line-height: 4rem;
-		padding-left: 12px;
-		text-decoration: none;
-		margin: 0
-	}
-	span.version {
-		font-size: 9px;
-	}
+  .header {
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: .05rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: baseline;
+
+    h3 {
+      color: inherit;
+      line-height: 4rem;
+      padding-left: 12px;
+      text-decoration: none;
+      margin: 0;
+    }
+
+    span.version {
+      font-size: 9px;
+    }
+  }
+
+  .controlbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    i {
+      margin: 0 10px;
+      font-size: 1em;
+    }
+
+    p-progressbar {
+      width: 100%;
+      margin-left: 10px;
+      margin-right: 12px;
+
+      /deep/ .ui-progressbar {
+        height: 1em;
+
+        border: none;
+        background: #E4E4E4;
+
+        .ui-progressbar-value {
+          background: white;
+          border: none;
+        }
+      }
+
+    }
+  }
+
 }
 
-
 .playlist__item {
-	border-bottom: 1px solid #D5D5D5;
-	.playlist__itemwrapper {
-		justify-content: center;
-		font-size: 16px;
-		padding: 20px;
-		align-items: center;
-		.playlist__thumbnail {
-			text-align: center;
-			position: relative;
-			display: block;
-			width: 120px;
-            height: 90px;
-            margin: 0 auto;
+  border-bottom: 1px solid #D5D5D5;
 
-			&:hover {
-				.thumbnail__overlay {
-                    background-color: rgba(0,0,0,0.5);
-                    i{
-                        opacity: 1;
-                    }
-				}
-			}
+  .playlist__itemwrapper {
+    justify-content: center;
+    font-size: 16px;
+    padding: 20px;
+    align-items: center;
 
-			.thumbnail__overlay {
-				background-color: rgba(0, 0, 0, 0);
-				height: 100%;
-				width: 100%;
-				top: 0;
-				cursor: pointer;
-				left: 0;
-				position: absolute;
-				padding: 0;
-				transition: all .5s;
+    .playlist__thumbnail {
+      text-align: center;
+      position: relative;
+      display: block;
+      width: 120px;
+      height: 90px;
+      margin: 0 auto;
 
-				i {
-                    color: #fff;
-                    position: absolute;
-                    opacity: 0;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    -ms-transform: translate(-50%, -50%);
-                    text-align: center;
-				}
-			}
+      &:hover {
+        .thumbnail__overlay {
+          background-color: rgba(0,0,0,0.5);
 
+          i {
+            opacity: 1;
+          }
+        }
+      }
 
-		}
-	}
+      .thumbnail__overlay {
+        background-color: rgba(0, 0, 0, 0);
+        height: 100%;
+        width: 100%;
+        top: 0;
+        cursor: pointer;
+        left: 0;
+        position: absolute;
+        padding: 0;
+        transition: all .5s;
 
+        i {
+          color: #fff;
+          position: absolute;
+          opacity: 0;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          -ms-transform: translate(-50%, -50%);
+          text-align: center;
+        }
+      }
+
+    }
+  }
 
 }
 
 /deep/ #youtube__frame {
-	display: none;
-	visibility: hidden;
+  display: none;
+  visibility: hidden;
 }
