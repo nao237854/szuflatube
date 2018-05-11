@@ -40,6 +40,9 @@ export class PlaylistComponent {
   private playlist: object[];
   private leftHeight: string;
 
+  private progressValue = 0;
+  private progressInterval;
+
   // TypeScript public modifiers
   constructor(public appState: AppState,
     public playlistService: PlaylistService) {
@@ -75,15 +78,43 @@ export class PlaylistComponent {
       switch (event.data) {
         case 1: {
           this.playlist[this.playListBuffer.getCurrent()]['snippet'].thumbnails.overlayIcon = 'pause';
+          this.progressInterval = setInterval(() => {
+            this.player.getCurrentTime().then((currentTime) => {
+              this.player.getDuration().then((duration) => {
+                this.progressValue = (currentTime / duration) * 100;
+              });
+               
+      
+            })
+        
+          }, 100);
           break;
         }
         case 2:
         case 0: {
+          clearInterval(this.progressInterval);
           this.playlist[this.playListBuffer.getCurrent()]['snippet'].thumbnails.overlayIcon = 'play';
           break;
         }
       }
     });
+
+
+    let progressBar = document.querySelector("p-progressBar");
+    progressBar.addEventListener("click", (e: any) => {
+
+      this.player.getDuration().then((duration) => {
+        if (duration) {
+          this.progressValue = Math.floor((e.offsetX / progressBar.clientWidth) * 100);
+          this.player.seekTo(Math.floor((e.offsetX / progressBar.clientWidth) * duration));
+        }
+
+      })
+
+    });
+
+
+
 
   }
 
@@ -113,6 +144,7 @@ export class PlaylistComponent {
     }
 
   }
+
 
 
   private getFullData(config, data: object[] = []) {
