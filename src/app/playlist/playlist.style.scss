@@ -36,8 +36,19 @@ nav {
 
     i {
       margin: 0 10px;
-	  font-size: 1em;
-	  cursor: pointer;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    .controlbar_progressbar {
+      position: relative;
+      width: 100%;
+
+      .controlbar__duration {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
     }
 
     p-progressbar {
@@ -65,7 +76,6 @@ nav {
 }
 
 .playlist {
-	
   .playlist__item {
     border-bottom: 1px solid #D5D5D5;
 
@@ -128,8 +138,9 @@ nav {
     }
 
   }
-  /deep/ .ui-datascroller-content{
-	  padding:0;
+
+  /deep/ .ui-datascroller-content {
+    padding: 0;
   }
 }
 

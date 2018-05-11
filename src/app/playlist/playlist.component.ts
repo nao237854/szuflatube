@@ -41,6 +41,9 @@ export class PlaylistComponent {
   private leftHeight: string;
 
   private progressValue = 0;
+  private progressDuration = new Date(1970, 0, 1);
+  private progressCurrentTime = new Date(1970, 0, 1);
+  
   private progressInterval;
 
   private playerPlayIcon = 'play';
@@ -85,7 +88,18 @@ export class PlaylistComponent {
           this.progressInterval = setInterval(() => {
             this.player.getCurrentTime().then((currentTime) => {
               this.player.getDuration().then((duration) => {
+
                 this.progressValue = (currentTime / duration) * 100;
+
+                let tempDuration = new Date(1970, 0, 1); // Epoch
+                tempDuration.setSeconds(duration);
+
+                let tempCurrentTime = new Date(1970, 0, 1); // Epoch
+                tempCurrentTime.setSeconds(currentTime);
+
+                this.progressDuration = tempDuration;
+                this.progressCurrentTime = tempCurrentTime;
+                
               });
 
 
@@ -151,7 +165,7 @@ export class PlaylistComponent {
   }
 
   private play() {
-    if (this.playListBuffer.getPrevious() == -1) {
+    if (this.playListBuffer.getCurrent()) {
       this.playListBuffer.add(0);
       this.player.loadVideoById(this.playlist[0]['contentDetails'].videoId); 
     }
@@ -159,6 +173,7 @@ export class PlaylistComponent {
     if (this.playerPlayIcon === 'pause') {
       this.player.pauseVideo();
     } else {
+
       this.player.playVideo();
     }
 
@@ -189,7 +204,7 @@ export class PlaylistComponent {
 
 
 class PlaylistBuffer {
-  private buffer = [-1];
+  private buffer = [-1,-1];
   constructor() { }
 
   public add(index) {

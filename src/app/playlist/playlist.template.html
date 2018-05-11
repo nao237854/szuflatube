@@ -7,8 +7,12 @@
 	<div class="ui-md-9 ui-lg-11 controlbar">
 		<!-- <i class="fa fa-step-backward" aria-hidden="true"></i> -->
 		<i class="fa fa-{{playerPlayIcon}}" (click)="play()" aria-hidden="true"></i>
+		<div class="controlbar_progressbar">
+			<span class="controlbar__duration">{{progressCurrentTime | date : 'HH:mm:ss'}} / {{progressDuration | date : 'HH:mm:ss'}}</span>
+			<p-progressBar [showValue]="false" [value]="progressValue"></p-progressBar>
+		</div>
+
 		<!-- <i class="fa fa-step-forward" aria-hidden="true"></i> -->
-		<p-progressBar [showValue]="false" [value]="progressValue"></p-progressBar>
 	</div>
 
 
@@ -28,7 +32,7 @@
 						</div>
 					</div>
 					<div (click)="playlistItemTileBehaviour(playlistItem, i)" class="ui-g-6">
-						<span class="playlist__title">{{playlistItem.snippet.title}}</span> 
+						<span class="playlist__title">{{playlistItem.snippet.title}}</span>
 					</div>
 				</div>
 			</div>
