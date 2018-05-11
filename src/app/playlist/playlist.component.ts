@@ -105,8 +105,11 @@ export class PlaylistComponent {
           }, 100);
           break;
         }
-        case 2:
         case 0: {
+          this.next();
+          break;
+        }
+        case 2: {
           this.playerPlayIcon = 'play';
           clearInterval(this.progressInterval);
           this.playlist[this.playListBuffer.getCurrent()]['snippet'].thumbnails.overlayIcon = 'play';
@@ -140,13 +143,11 @@ export class PlaylistComponent {
         //https://developers.google.com/youtube/iframe_api_reference#Functions
         switch (res) {
           case 1: {
-            // playlistItem.snippet.thumbnails.overlayIcon = 'play';
             this.player.pauseVideo();
             break;
           }
           case 2:
           case 0: {
-            // playlistItem.snippet.thumbnails.overlayIcon = 'pause';
             this.player.playVideo();
             break;
           }
@@ -177,10 +178,13 @@ export class PlaylistComponent {
   }
 
   private next() {
-    this.player.loadVideoById(this.playlist[this.playListBuffer.getCurrent() + 1]
-    ['contentDetails'].videoId);
-    this.player.playVideo();
-    this.playListBuffer.add(this.playListBuffer.getCurrent() + 1);
+    if (this.playListBuffer.getCurrent() + 1 < this.playlist.length) {
+      this.player.loadVideoById(this.playlist[this.playListBuffer.getCurrent() + 1]
+      ['contentDetails'].videoId);
+      this.player.playVideo();
+      this.playListBuffer.add(this.playListBuffer.getCurrent() + 1);
+    }
+
   }
 
   private prev() {
