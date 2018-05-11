@@ -5,14 +5,15 @@
 		<span class="version">v0.2.2</span>
 	</div>
 	<div class="ui-md-9 ui-lg-11 controlbar">
-		<!-- <i class="fa fa-step-backward" aria-hidden="true"></i> -->
-		<i class="fa fa-{{playerPlayIcon}}" (click)="play()" aria-hidden="true"></i>
-		<div class="controlbar_progressbar">
+		<i [ngClass]="{'controlbar__prev--disabled' : playListBuffer.getCurrent() - 1 < 0}" class="fa fa-step-backward controlbar__prev" (click)="prev()" aria-hidden="true"></i>
+		<i class="fa fa-{{playerPlayIcon}} controlbar__play" (click)="play()" aria-hidden="true"></i>
+		<i class="fa fa-step-forward controlbar__next" (click)="next()" aria-hidden="true"></i>
+		<div class="controlbar__progressbar">
 			<span class="controlbar__duration">{{progressCurrentTime | date : 'HH:mm:ss'}} / {{progressDuration | date : 'HH:mm:ss'}}</span>
 			<p-progressBar [showValue]="false" [value]="progressValue"></p-progressBar>
 		</div>
 
-		<!-- <i class="fa fa-step-forward" aria-hidden="true"></i> -->
+		
 	</div>
 
 

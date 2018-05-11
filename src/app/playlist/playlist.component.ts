@@ -43,7 +43,7 @@ export class PlaylistComponent {
   private progressValue = 0;
   private progressDuration = new Date(1970, 0, 1);
   private progressCurrentTime = new Date(1970, 0, 1);
-  
+
   private progressInterval;
 
   private playerPlayIcon = 'play';
@@ -99,7 +99,7 @@ export class PlaylistComponent {
 
                 this.progressDuration = tempDuration;
                 this.progressCurrentTime = tempCurrentTime;
-                
+
               });
 
 
@@ -167,7 +167,7 @@ export class PlaylistComponent {
   private play() {
     if (this.playListBuffer.getCurrent() === -1) {
       this.playListBuffer.add(0);
-      this.player.loadVideoById(this.playlist[0]['contentDetails'].videoId); 
+      this.player.loadVideoById(this.playlist[0]['contentDetails'].videoId);
     }
 
     if (this.playerPlayIcon === 'pause') {
@@ -177,10 +177,24 @@ export class PlaylistComponent {
       this.player.playVideo();
     }
 
-
   }
 
+  private next() {
+    this.player.loadVideoById(this.playlist[this.playListBuffer.getCurrent() + 1]
+    ['contentDetails'].videoId);
+    this.player.playVideo();
+    this.playListBuffer.add(this.playListBuffer.getCurrent() + 1);
+  }
 
+  private prev() {
+    if (this.playListBuffer.getCurrent() - 1 >= 0) {
+      this.player.loadVideoById(this.playlist[this.playListBuffer.getCurrent() - 1]
+      ['contentDetails'].videoId);
+      this.player.playVideo();
+      this.playListBuffer.add(this.playListBuffer.getCurrent() - 1);
+    }
+
+  }
 
   private getFullData(config, data: object[] = []) {
 
@@ -204,7 +218,7 @@ export class PlaylistComponent {
 
 
 class PlaylistBuffer {
-  private buffer = [-1,-1];
+  private buffer = [-1, -1];
   constructor() { }
 
   public add(index) {
