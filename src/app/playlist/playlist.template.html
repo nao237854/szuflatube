@@ -2,7 +2,7 @@
 
 	<div class="ui-g-4 ui-md-3 ui-lg-1 header">
 		<h3>SzuflaTube</h3>
-		<span class="version">v0.5.3</span>
+		<span class="version">v0.5.4</span>
 	</div>
 	<div class="ui-g-8 ui-md-9 ui-lg-11 controlbar">
 		<i [ngClass]="{'controlbar__prev--disabled' : playListBuffer.getCurrent() - 1 < 0}" class="fa fa-step-backward controlbar__prev" (click)="prev()" aria-hidden="true"></i>
@@ -26,7 +26,7 @@
 		<li class="playlist__item">
 			<div class="ui-grid ui-grid-responsive ui-fluid ui-g-nopad">
 				<div class="ui-grid-row playlist__itemwrapper">
-					<div (click)="playlistItemTileBehaviour(playlistItem, i)" class="ui-g-3">
+					<div (click)="playlistItemTileBehaviour(playlistItem, i)" class="ui-g-6 ui-md-3 ui-md-offset-1">
 						<div class="playlist__thumbnail">
 							<img src="{{playlistItem.snippet.thumbnails.default.url}}">
 							<div class="thumbnail__overlay">
@@ -34,7 +34,7 @@
 							</div>
 						</div>
 					</div>
-					<div (click)="playlistItemTileBehaviour(playlistItem, i)" class="ui-g-6">
+					<div (click)="playlistItemTileBehaviour(playlistItem, i)" class="ui-g-6 ui-md-8">
 						<span class="playlist__title">{{playlistItem.snippet.title}}</span>
 					</div>
 				</div>
