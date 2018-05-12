@@ -70,19 +70,6 @@ export class PlaylistComponent {
     };
 
     this.playlist = [];
-    this.changePlaylistUrlModal = {
-      show: false,
-      tempModel: this.tubeApiConfig.playlistId,
-      save: () => {
-        this.tubeApiConfig.playlistId = this.changePlaylistUrlModal.tempModel;
-        this.changePlaylistUrlModal.show = false;
-        this.playlist = [];
-        window.localStorage.setItem('szuflaTube',
-          JSON.stringify({ playlistId: this.tubeApiConfig.playlistId }));
-        this.tubeApiConfig.pageToken = '';
-        this.getFullData(this.tubeApiConfig);
-      }
-    };
 
   }
 
@@ -95,6 +82,22 @@ export class PlaylistComponent {
       this.tubeApiConfig.playlistId = localStorage.playlistId;
       this.getFullData(this.tubeApiConfig);
     }
+
+    this.changePlaylistUrlModal = {
+      show: false,
+      tempModel: this.tubeApiConfig.playlistId,
+      save: () => {
+        this.tubeApiConfig.playlistId = this.changePlaylistUrlModal.tempModel;
+        this.changePlaylistUrlModal.show = false;
+        this.playlist = [];
+        window.localStorage.setItem('szuflaTube',
+          JSON.stringify({ playlistId: this.tubeApiConfig.playlistId }));
+        this.tubeApiConfig.pageToken = '';
+        this.getFullData(this.tubeApiConfig);
+        this.playListBuffer.add(-1);
+        this.playListBuffer.add(0);
+      }
+    };
 
     this.playListBuffer = new PlaylistBuffer();
 
@@ -263,6 +266,10 @@ export class PlaylistComponent {
         this.playlist = this.playlist.concat(res.items);
         return this.getFullData(config, data);
       } else {
+        if (this.playerStatus === 'playing') {
+          this.player.loadVideoById(this.playlist[0]['contentDetails'].videoId);
+          this.player.playVideo();
+        }
         this.playlist = this.playlist.concat(res.items);
         console.log(this.playlist);
         return true;
