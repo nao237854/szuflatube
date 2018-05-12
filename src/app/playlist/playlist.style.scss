@@ -19,7 +19,6 @@ nav {
 		h3 {
 			color: inherit;
 			line-height: 4rem;
-			padding-left: 12px;
 			text-decoration: none;
 			margin: 0;
 		}
@@ -32,17 +31,31 @@ nav {
 	.controlbar {
 		display: flex;
 		flex-direction: row;
-		justify-content:space-between;
+		justify-content: space-between;
 		align-items: center;
-		margin-right: 12px;
 
 		i {
-			margin: 0 10px;
+
 			font-size: 1em;
 			cursor: pointer;
+
 		}
 
 		.controlbar__controlsleft {
+			padding-left: 20px;
+			i {
+				margin: 0 10px;
+				@media screen and (max-width: 640px) {
+					margin: 0 20px;
+				}
+				&:first-child {
+					margin-left: 0;
+				}
+				&:last-child {
+					margin-right: 0;
+				}
+			}
+
 			display: inherit;
 			align-items:inherit;
 			.controlbar__prev--disabled,
@@ -53,8 +66,20 @@ nav {
 			}
 		}
 		.controlbar__controlsright {
+			i {
+				margin: 0 10px;
+				&:first-child {
+					margin-left: 0;
+				}
+				&:last-child {
+					margin-right: 0;
+				}
+				@media screen and (max-width:640px) {
+					margin: 0 20px;
+				}
+			}
 			display: inherit;
-			align-items:inherit;
+			align-items: inherit;
 		}
 
 
@@ -109,9 +134,6 @@ nav {
 			.controlbar__progressbar {
 				display: none;
 			}
-			i{
-				margin: 0 20px;
-			}
 
 		}
 
@@ -119,6 +141,11 @@ nav {
 			position: relative;
 			width: 100%;
 			margin-right: calc(0.5em + 12px);
+			margin-left: calc(0.5em + 12px);
+
+			@media screen and (max-width: 640px) {
+				display: none;
+			}
 
 			.controlbar__duration {
 				position: absolute;

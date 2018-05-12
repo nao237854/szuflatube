@@ -1,10 +1,10 @@
 <nav>
 
-	<div class="ui-g-5 ui-md-2 ui-lg-1 header">
+	<div class="ui-g-4 ui-md-2 ui-lg-1 header">
 		<h3>SzuflaTube</h3>
-		<span class="version">v0.5.7</span>
+		<span class="version">v0.5.8</span>
 	</div>
-	<div class="ui-g-7 ui-md-10 ui-lg-11 controlbar">
+	<div class="ui-g-8 ui-md-10 ui-lg-11 controlbar">
 		<div class="controlbar__controlsleft">
 			<i [ngClass]="{'controlbar__prev--disabled' : playListBuffer.getCurrent() - 1 < 0}" class="fa fa-step-backward controlbar__prev"
 				(tap)="prev()" (click)="prev()" aria-hidden="true"></i>
