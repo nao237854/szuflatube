@@ -48,7 +48,7 @@ export class PlaylistComponent {
 
   private progressInterval;
 
-  private playerPlayIcon = 'play';
+  private playerStatus = 'notplaying';
 
   private hamburgermenu: MenuItem[];
 
@@ -115,12 +115,12 @@ export class PlaylistComponent {
 
     this.player.on('stateChange', (event) => {
       if (this.playListBuffer.getPrevious() !== -1) {
-        this.playerPlayIcon = 'play';
+        this.playerStatus = 'notplaying';
         this.playlist[this.playListBuffer.getPrevious()]['snippet'].thumbnails.overlayIcon = 'play';
       }
       switch (event.data) {
         case 1: {
-          this.playerPlayIcon = 'pause';
+          this.playerStatus = 'playing';
           this.playlist[this.playListBuffer.getCurrent()]['snippet'].thumbnails.overlayIcon = 'pause';
           this.progressInterval = setInterval(() => {
             this.player.getCurrentTime().then((currentTime) => {
@@ -147,7 +147,7 @@ export class PlaylistComponent {
           break;
         }
         case 2: {
-          this.playerPlayIcon = 'play';
+          this.playerStatus = 'notplaying';
           clearInterval(this.progressInterval);
           this.playlist[this.playListBuffer.getCurrent()]['snippet'].thumbnails.overlayIcon = 'play';
           break;
@@ -206,7 +206,7 @@ export class PlaylistComponent {
         this.player.loadVideoById(this.playlist[0]['contentDetails'].videoId);
       }
 
-      if (this.playerPlayIcon === 'pause') {
+      if (this.playerStatus === 'playing') {
         this.player.pauseVideo();
       } else {
 
@@ -236,12 +236,19 @@ export class PlaylistComponent {
   }
 
   private shufflePlaylist() {
+    const actucallState = this.playerStatus;
     this.playlist = _.shuffle(this.playlist);
     this.playListBuffer.add(-1);
     this.playListBuffer.add(0);
     this.player.loadVideoById(this.playlist[this.playListBuffer.getCurrent()]
     ['contentDetails'].videoId);
-    this.player.stopVideo();
+
+    if (actucallState === 'playing') {
+      this.player.playVideo();
+    } else {
+      this.player.stopVideo();
+    }
+
     this.progressValue = 0;
     this.progressDuration = new Date(1970, 0, 1);
     this.progressCurrentTime = new Date(1970, 0, 1);

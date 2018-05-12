@@ -2,11 +2,12 @@
 
 	<div class="ui-md-3 ui-lg-1 header">
 		<h3>SzuflaTube</h3>
-		<span class="version">v0.5.0</span>
+		<span class="version">v0.5.1</span>
 	</div>
 	<div class="ui-md-9 ui-lg-11 controlbar">
+		{{tubeApiConfig.playlistId}}
 		<i [ngClass]="{'controlbar__prev--disabled' : playListBuffer.getCurrent() - 1 < 0}" class="fa fa-step-backward controlbar__prev" (click)="prev()" aria-hidden="true"></i>
-		<i [ngClass]="{'controlbar__play--disabled' : tubeApiConfig.playlistId === ''}" class="fa fa-{{playerPlayIcon}} controlbar__play" (click)="play()" aria-hidden="true"></i>
+		<i [ngClass]="{'controlbar__play--disabled' : tubeApiConfig.playlistId === '','fa-play' : playerStatus === 'notplaying','fa-pause' : playerStatus === 'playing' }" class="fa controlbar__play" (click)="play()" aria-hidden="true"></i>
 		<i [ngClass]="{'controlbar__next--disabled' : tubeApiConfig.playlistId === ''}" class="fa fa-step-forward controlbar__next" (click)="next()" aria-hidden="true"></i>
 		<div class="controlbar__progressbar">
 			<span *ngIf="progressCurrentTime" class="controlbar__duration">{{progressCurrentTime | date : 'HH:mm:ss'}} / {{progressDuration | date : 'HH:mm:ss'}}</span>
