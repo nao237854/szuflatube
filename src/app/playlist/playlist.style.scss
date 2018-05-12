@@ -34,21 +34,67 @@ nav {
 		flex-direction: row;
 		justify-content: flex-start;
 		align-items: center;
+		margin-right: 12px;
 
 		i {
 			margin: 0 10px;
 			font-size: 1em;
 			cursor: pointer;
-    }
-    
-    .controlbar__prev{
-      &.controlbar__prev--disabled{
-        color:$darkgray-color;
-        cursor: default;
-      }
-    }
+		}
 
-		margin-right: 12px;
+
+		.controlbar__prev--disabled,
+		.controlbar__play--disabled,
+		.controlbar__next--disabled {
+			color: $darkgray-color;
+			cursor: default;
+		}
+
+		.controlbar__hamburgermenu {
+			/deep/ .ui-menubar.ui-widget.ui-widget-content.ui-corner-all {
+				background: none;
+				padding: 0;
+				border: none;
+
+				.ui-menuitem.ui-menuitem-active>.ui-menuitem-link {
+					background: transparent;
+				}
+				.ui-menuitem-link {
+					// padding:0;
+					&:hover {
+						background-color: transparent;
+					}
+				}
+				.ui-submenu-icon,
+				.ui-menubar-custom {
+					display: none;
+				}
+				.ui-menuitem-icon {
+					color: white;
+				}
+				.ui-submenu-list {
+					.ui-menuitem-icon {
+						color: black;
+					}
+					.ui-menuitem-link:hover {
+						color: black;
+					}
+					.ui-menuitem-active {
+						.ui-menuitem-link,
+						.ui-menuitem-icon {
+							background: $primary-color;
+							color: white;
+						}
+						.ui-submenu>.ui-submenu-list {
+							display: none;
+						}
+					}
+
+					left:auto !important;
+					right:0 !important;
+				}
+			}
+		}
 
 		.controlbar__progressbar {
 			position: relative;
@@ -155,6 +201,13 @@ nav {
 		padding: 0;
 	}
 }
+
+.change-playlist-modal {
+	.ui-inputtext {
+		min-width: 25vw;
+	}
+}
+
 
 /deep/ #youtube__frame {
 	display: none;

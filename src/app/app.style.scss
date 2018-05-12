@@ -1,18 +1,91 @@
-
 @import "app.style.variables";
 @import "app.style.mixins";
 @import "app.style.functions";
 
-html, body{
-  height: 100%;
-  margin: 0;
-  background: white;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 12px;
+html,
+body {
+	height: 100%;
+	margin: 0;
+	background: white;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
 }
 
-.ui-progressbar{
-    .ui-progressbar-value{
-            background: linear-gradient(to bottom, red 0%,violet 100%);
-    }
+app {
+	.ui-widget-content .ui-button, .ui-widget.ui-button,.ui-button {
+		border: 1px solid $primary-color;
+		color: #FFFFFF;
+		background: $primary-color;
+		&:enabled {
+			&:hover,
+			&:active,
+			&:focus {
+				border: 1px solid $secondary-color;
+				color: #FFFFFF;
+				background: $secondary-color;
+			}
+		}
+	}
+	.ui-panel {
+		.ui-panel-content {
+			padding: 0;
+		}
+	}
+
+	.ui-dialog {
+		margin-top: -5%;
+		.ui-messages {
+			ul {
+				width: 18em;
+				.ui-messages-summary,
+				.ui-messages-detail {
+					margin-left: 0;
+				}
+			}
+			>span {
+				width: 1em;
+			}
+		}
+		border:none;
+		.ui-dialog-content {
+			padding: 0.5em 1.5em 1em;
+		}
+		.ui-dialog-titlebar {
+			border-bottom: 1px solid $gray-color;
+		}
+		.ui-dialog-titlebar-icon {
+			color: $darkgray-color;
+			&:hover {
+				border-color: transparent;
+				background: inherit;
+				color: $primary-color;
+			}
+		}
+		.ui-dialog-footer {
+			border: none;
+			padding: 0;
+			button {
+				border-radius: 0;
+				padding: 10px;
+				&:first-child {
+					border-right: 1px solid $darkgray-color;
+				}
+				width:50%;
+			}
+		}
+	}
+
+	.ui-inputtext {
+		&:disabled {
+
+			filter: none;
+			opacity: 1.0;
+			background: #eee;
+
+		}
+	}
+
+	.ui-widget-header {
+		background: white;
+	}
 }

@@ -2,17 +2,18 @@
 
 	<div class="ui-md-3 ui-lg-1 header">
 		<h3>SzuflaTube</h3>
-		<span class="version">v0.4.1</span>
+		<span class="version">v0.5.0</span>
 	</div>
 	<div class="ui-md-9 ui-lg-11 controlbar">
 		<i [ngClass]="{'controlbar__prev--disabled' : playListBuffer.getCurrent() - 1 < 0}" class="fa fa-step-backward controlbar__prev" (click)="prev()" aria-hidden="true"></i>
-		<i class="fa fa-{{playerPlayIcon}} controlbar__play" (click)="play()" aria-hidden="true"></i>
-		<i class="fa fa-step-forward controlbar__next" (click)="next()" aria-hidden="true"></i>
+		<i [ngClass]="{'controlbar__play--disabled' : tubeApiConfig.playlistId === ''}" class="fa fa-{{playerPlayIcon}} controlbar__play" (click)="play()" aria-hidden="true"></i>
+		<i [ngClass]="{'controlbar__next--disabled' : tubeApiConfig.playlistId === ''}" class="fa fa-step-forward controlbar__next" (click)="next()" aria-hidden="true"></i>
 		<div class="controlbar__progressbar">
 			<span *ngIf="progressCurrentTime" class="controlbar__duration">{{progressCurrentTime | date : 'HH:mm:ss'}} / {{progressDuration | date : 'HH:mm:ss'}}</span>
 			<p-progressBar [showValue]="false" [value]="progressValue"></p-progressBar>
 		</div>
 		<i class="fa fa-random controlbar__shuffle" (click)="shufflePlaylist()" aria-hidden="true"></i>
+		<p-menubar class="controlbar__hamburgermenu" [model]="hamburgermenu" [autoDisplay]="false"></p-menubar>
 
 		
 	</div>
@@ -43,3 +44,8 @@
 </p-dataScroller>
 
 <object id="youtube__frame"></object>
+
+<p-dialog autoAlign="true" minHeight="0" responsive="true" resizable="false" header="Change playlist url" class="change-playlist-modal" [(visible)]="changePlaylistUrlModal.show">
+	<input type="text" pInputText [(ngModel)]="changePlaylistUrlModal.tempModel"/>
+	<button type="button" pButton icon="fa-check" (click)="changePlaylistUrlModal.save()" label="Save"></button>
+</p-dialog>

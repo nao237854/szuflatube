@@ -9,6 +9,8 @@ import 'rxjs/add/operator/map';
 
 import * as _ from 'underscore';
 
+import { MenuItem } from 'primeng/api';
+
 @Component({
   // The selector is what angular internally uses
   // for `document.querySelectorAll(selector)` in our index.html
@@ -48,6 +50,10 @@ export class PlaylistComponent {
 
   private playerPlayIcon = 'play';
 
+  private hamburgermenu: MenuItem[];
+
+  private changePlaylistUrlModal;
+
   // TypeScript public modifiers
   constructor(public appState: AppState,
     public playlistService: PlaylistService) {
@@ -57,24 +63,55 @@ export class PlaylistComponent {
       maxResults: '50',
       pageToken: '',
       part: 'snippet,contentDetails',
-      playlistId: 'PLT702vInLOC0WSRsoqLdqYDH9lypgkxaM',
+      playlistId: '',
       // tslint:disable-next-line:max-line-length
       fields: 'nextPageToken,items(snippet/title, snippet/thumbnails,contentDetails(videoId,startAt,endAt))',
       key: 'AIzaSyBmdqx5dDcczcPBa3PuoI2j2XVmxZiuRjo'
     };
 
     this.playlist = [];
+    this.changePlaylistUrlModal = {
+      show: false,
+      tempModel: this.tubeApiConfig.playlistId,
+      save: () => {
+        this.tubeApiConfig.playlistId = this.changePlaylistUrlModal.tempModel;
+        this.changePlaylistUrlModal.show = false;
+        this.playlist = [];
+        window.localStorage.setItem('szuflaTube',
+          JSON.stringify({ playlistId: this.tubeApiConfig.playlistId }));
+        this.tubeApiConfig.pageToken = '';
+        this.getFullData(this.tubeApiConfig);
+      }
+    };
 
   }
 
   private ngOnInit() {
     this.leftHeight = window.innerHeight -
       document.getElementsByTagName('nav')[0].clientHeight - 10 + 'px';
-    this.getFullData(this.tubeApiConfig);
+
+    const localStorage = JSON.parse(window.localStorage.getItem('szuflaTube'));
+    if (localStorage) {
+      this.tubeApiConfig.playlistId = localStorage.playlistId;
+      this.getFullData(this.tubeApiConfig);
+    }
 
     this.playListBuffer = new PlaylistBuffer();
 
     this.player = YouTubePlayer('youtube__frame');
+
+    this.hamburgermenu = [
+      {
+        label: '',
+        icon: 'fa-bars',
+        items: [{
+          label: 'Change playlist url',
+          icon: 'fa-edit',
+          command: () => this.changePlaylistUrlModal.show = true
+        },
+        ]
+      },
+    ];
 
     this.player.on('stateChange', (event) => {
       if (this.playListBuffer.getPrevious() !== -1) {
@@ -163,16 +200,18 @@ export class PlaylistComponent {
   }
 
   private play() {
-    if (this.playListBuffer.getCurrent() === -1) {
-      this.playListBuffer.add(0);
-      this.player.loadVideoById(this.playlist[0]['contentDetails'].videoId);
-    }
+    if (this.tubeApiConfig.playlistId !== '') {
+      if (this.playListBuffer.getCurrent() === -1) {
+        this.playListBuffer.add(0);
+        this.player.loadVideoById(this.playlist[0]['contentDetails'].videoId);
+      }
 
-    if (this.playerPlayIcon === 'pause') {
-      this.player.pauseVideo();
-    } else {
+      if (this.playerPlayIcon === 'pause') {
+        this.player.pauseVideo();
+      } else {
 
-      this.player.playVideo();
+        this.player.playVideo();
+      }
     }
 
   }
@@ -184,7 +223,6 @@ export class PlaylistComponent {
       this.player.playVideo();
       this.playListBuffer.add(this.playListBuffer.getCurrent() + 1);
     }
-
   }
 
   private prev() {
