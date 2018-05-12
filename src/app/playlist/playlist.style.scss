@@ -150,7 +150,7 @@ nav {
 			.controlbar__duration {
 				position: absolute;
 				top: -1.5em;
-				left: 10px;
+				left: 0;
 				line-height: 2.1em;
 
 			}
@@ -159,7 +159,6 @@ nav {
 
 			p-progressbar {
 				width: 100%;
-				margin-left: 10px;
 				display: block;
 
 				/deep/ .ui-progressbar {
