@@ -2,16 +2,16 @@
 
 	<div class="ui-g-5 ui-md-2 ui-lg-1 header">
 		<h3>SzuflaTube</h3>
-		<span class="version">v0.5.5</span>
+		<span class="version">v0.5.7</span>
 	</div>
-	<div class="ui-g-7 ui-md-9 ui-lg-11 controlbar">
+	<div class="ui-g-7 ui-md-10 ui-lg-11 controlbar">
 		<div class="controlbar__controlsleft">
 			<i [ngClass]="{'controlbar__prev--disabled' : playListBuffer.getCurrent() - 1 < 0}" class="fa fa-step-backward controlbar__prev"
-			    (click)="prev()" aria-hidden="true"></i>
+				(tap)="prev()" (click)="prev()" aria-hidden="true"></i>
 			<i [ngClass]="{'controlbar__play--disabled' : tubeApiConfig.playlistId === '','fa-play' : playerStatus === 'notplaying','fa-pause' : playerStatus === 'playing' }"
-			    class="fa controlbar__play" (click)="play()" aria-hidden="true"></i>
+			    class="fa controlbar__play" (tap)="play()" (click)="play()" aria-hidden="true"></i>
 			<i [ngClass]="{'controlbar__next--disabled' : tubeApiConfig.playlistId === ''}" class="fa fa-step-forward controlbar__next"
-			    (click)="next()" aria-hidden="true"></i>
+				(tap)="next()" (click)="next()" aria-hidden="true"></i>
 		</div>
 
 		<div class="controlbar__progressbar">
@@ -34,7 +34,7 @@
 		<li class="playlist__item">
 			<div class="ui-grid ui-grid-responsive ui-fluid ui-g-nopad">
 				<div class="ui-grid-row playlist__itemwrapper">
-					<div (click)="playlistItemTileBehaviour(playlistItem, i)" class="ui-g-6 ui-md-3 ui-md-offset-1">
+					<div (tap)="playlistItemTileBehaviour(playlistItem, i)" (click)="playlistItemTileBehaviour(playlistItem, i)" class="ui-g-6 ui-md-3 ui-md-offset-1">
 						<div class="playlist__thumbnail">
 							<img src="{{playlistItem.snippet.thumbnails.default.url}}">
 							<div class="thumbnail__overlay">
@@ -42,7 +42,7 @@
 							</div>
 						</div>
 					</div>
-					<div (click)="playlistItemTileBehaviour(playlistItem, i)" class="ui-g-6 ui-md-8">
+					<div (tap)="playlistItemTileBehaviour(playlistItem, i)" (click)="playlistItemTileBehaviour(playlistItem, i)" class="ui-g-6 ui-md-8">
 						<span class="playlist__title">{{playlistItem.snippet.title}}</span>
 					</div>
 				</div>
