@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { AppState } from '../app.service';
+import { DOCUMENT } from '@angular/common';
 
 import { PlaylistService } from './playlist.service';
 
@@ -56,7 +57,8 @@ export class PlaylistComponent {
 
   // TypeScript public modifiers
   constructor(public appState: AppState,
-    public playlistService: PlaylistService) {
+              public playlistService: PlaylistService,
+              @Inject(DOCUMENT) document) {
 
     this.tubeApiConfig = {
       baseURL: 'https://content.googleapis.com/youtube/v3/playlistItems?',
@@ -94,8 +96,7 @@ export class PlaylistComponent {
           JSON.stringify({ playlistId: this.tubeApiConfig.playlistId }));
         this.tubeApiConfig.pageToken = '';
         this.getFullData(this.tubeApiConfig);
-        this.playListBuffer.add(-1);
-        this.playListBuffer.add(0);
+        this.playListBuffer.reset();
       }
     };
 
@@ -117,14 +118,26 @@ export class PlaylistComponent {
     ];
 
     this.player.on('stateChange', (event) => {
-      if (this.playListBuffer.getPrevious() !== -1) {
+      if (this.playListBuffer.getPrevious().index !== -1) {
         this.playerStatus = 'notplaying';
-        this.playlist[this.playListBuffer.getPrevious()]['snippet'].thumbnails.overlayIcon = 'play';
+        this.playlist[this.playListBuffer.getPrevious().index]
+        ['state'] = 'notplaying';
       }
       switch (event.data) {
         case 1: {
           this.playerStatus = 'playing';
-          this.playlist[this.playListBuffer.getCurrent()]['snippet'].thumbnails.overlayIcon = 'pause';
+          this.playlist[this.playListBuffer.getCurrent().index]
+          ['state'] = 'playing';
+
+          const nextItem: any = document.getElementById(this.playListBuffer.getCurrent().
+          playlistItem.contentDetails.videoId);
+
+          nextItem.scrollIntoView(true);
+
+          const playlistItems = document.querySelector('.ui-datascroller-content');
+          playlistItems.scrollTop -= window.innerHeight / 2 - nextItem.clientHeight;
+          // playlistItems.scrollTo(0, nextItem.offsetTop);
+
           this.progressInterval = setInterval(() => {
             this.player.getCurrentTime().then((currentTime) => {
               this.player.getDuration().then((duration) => {
@@ -152,15 +165,15 @@ export class PlaylistComponent {
         case 2: {
           this.playerStatus = 'notplaying';
           clearInterval(this.progressInterval);
-          this.playlist[this.playListBuffer.getCurrent()]['snippet'].thumbnails.overlayIcon = 'play';
+          this.playlist[this.playListBuffer.getCurrent().index]
+          ['state'] = 'notplaying';
           break;
         }
       }
     });
 
-
-    let progressBar = document.querySelector("p-progressBar");
-    progressBar.addEventListener("click", (e: any) => {
+    const progressBar = document.querySelector('p-progressBar');
+    progressBar.addEventListener('click', (e: any) => {
 
       this.player.getDuration().then((duration) => {
         if (duration) {
@@ -168,17 +181,14 @@ export class PlaylistComponent {
           this.player.seekTo(Math.floor((e.offsetX / progressBar.clientWidth) * duration));
         }
 
-      })
+      });
 
     });
-
-
-
 
   }
 
   private playlistItemTileBehaviour(playlistItem, index) {
-    if (this.playListBuffer.getCurrent() === index) {
+    if (this.playListBuffer.getCurrent().index === index) {
       this.player.getPlayerState().then((res) => {
         //https://developers.google.com/youtube/iframe_api_reference#Functions
         switch (res) {
@@ -193,9 +203,8 @@ export class PlaylistComponent {
           }
         }
       });
-    }
-    else {
-      this.playListBuffer.add(index);
+    } else {
+      this.playListBuffer.add({ playlistItem: this.playlist[index], index });
       this.player.loadVideoById(playlistItem.contentDetails.videoId);
       this.player.playVideo();
     }
@@ -204,8 +213,8 @@ export class PlaylistComponent {
 
   private play() {
     if (this.tubeApiConfig.playlistId !== '') {
-      if (this.playListBuffer.getCurrent() === -1) {
-        this.playListBuffer.add(0);
+      if (this.playListBuffer.getCurrent().index === -1) {
+        this.playListBuffer.add({ playlistItem: this.playlist[0], index: 0 });
         this.player.loadVideoById(this.playlist[0]['contentDetails'].videoId);
       }
 
@@ -220,20 +229,26 @@ export class PlaylistComponent {
   }
 
   private next() {
-    if (this.playListBuffer.getCurrent() + 1 < this.playlist.length) {
-      this.player.loadVideoById(this.playlist[this.playListBuffer.getCurrent() + 1]
+    if (this.playListBuffer.getCurrent().index + 1 < this.playlist.length) {
+      this.player.loadVideoById(this.playlist[this.playListBuffer.getCurrent().index + 1]
       ['contentDetails'].videoId);
       this.player.playVideo();
-      this.playListBuffer.add(this.playListBuffer.getCurrent() + 1);
+      this.playListBuffer.add({
+        playlistItem: this.playlist[this.playListBuffer.getCurrent().index + 1],
+        index: this.playListBuffer.getCurrent().index + 1
+      });
     }
   }
 
   private prev() {
-    if (this.playListBuffer.getCurrent() - 1 >= 0) {
-      this.player.loadVideoById(this.playlist[this.playListBuffer.getCurrent() - 1]
+    if (this.playListBuffer.getCurrent().index - 1 >= 0) {
+      this.player.loadVideoById(this.playlist[this.playListBuffer.getCurrent().index - 1]
       ['contentDetails'].videoId);
       this.player.playVideo();
-      this.playListBuffer.add(this.playListBuffer.getCurrent() - 1);
+      this.playListBuffer.add({
+        playlistItem: this.playlist[this.playListBuffer.getCurrent().index - 1],
+        index: this.playListBuffer.getCurrent().index - 1
+      });
     }
 
   }
@@ -241,9 +256,9 @@ export class PlaylistComponent {
   private shufflePlaylist() {
     const actucallState = this.playerStatus;
     this.playlist = _.shuffle(this.playlist);
-    this.playListBuffer.add(-1);
-    this.playListBuffer.add(0);
-    this.player.loadVideoById(this.playlist[this.playListBuffer.getCurrent()]
+    this.playListBuffer.reset();
+    this.playListBuffer.add({ playlistItem: this.playlist[0], index: 0 });
+    this.player.loadVideoById(this.playlist[this.playListBuffer.getCurrent().index]
     ['contentDetails'].videoId);
 
     if (actucallState === 'playing') {
@@ -281,15 +296,18 @@ export class PlaylistComponent {
 
 }
 
+// tslint:disable-next-line:max-classes-per-file
 class PlaylistBuffer {
-  private buffer = [-1, -1];
-  constructor() { }
+  private buffer;
+  constructor() {
+    this.buffer = [{ playlistItem: null, index: -1 }, { playlistItem: null, index: -1 }];
+  }
 
   public add(index) {
     if (this.buffer.length > 1) {
       this.buffer.shift();
     }
-    this.buffer.push(index)
+    this.buffer.push(index);
   }
 
   public getPrevious() {
@@ -297,5 +315,8 @@ class PlaylistBuffer {
   }
   public getCurrent() {
     return this.buffer[1];
+  }
+  public reset() {
+    this.buffer = [{ playlistItem: null, index: -1 }, { playlistItem: null, index: -1 }];
   }
 }

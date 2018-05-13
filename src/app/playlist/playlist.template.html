@@ -2,11 +2,11 @@
 
 	<div class="ui-g-4 ui-md-2 ui-lg-1 header">
 		<h3>SzuflaTube</h3>
-		<span class="version">v0.5.10</span>
+		<span class="version">v0.6.0</span>
 	</div>
 	<div class="ui-g-8 ui-md-10 ui-lg-11 controlbar">
 		<div class="controlbar__controlsleft">
-			<i [ngClass]="{'controlbar__prev--disabled' : playListBuffer.getCurrent() - 1 < 0}" class="fa fa-step-backward controlbar__prev"
+			<i [ngClass]="{'controlbar__prev--disabled' : playListBuffer.getCurrent().index - 1 < 0}" class="fa fa-step-backward controlbar__prev"
 				(tap)="prev()" aria-hidden="true"></i>
 			<i [ngClass]="{'controlbar__play--disabled' : tubeApiConfig.playlistId === '','fa-play' : playerStatus === 'notplaying','fa-pause' : playerStatus === 'playing' }"
 			    class="fa controlbar__play" (tap)="play()" aria-hidden="true"></i>
@@ -29,16 +29,16 @@
 
 </nav>
 
-<p-dataScroller class="playlist" [value]="playlist" [rows]="10" [inline]="true" scrollHeight="{{leftHeight}}">
+<p-dataScroller [lazy]="false" class="playlist" [value]="playlist" [rows]="9999" [inline]="true" scrollHeight="{{leftHeight}}">
 	<ng-template let-i="index" let-playlistItem pTemplate="item">
 		<li class="playlist__item">
 			<div class="ui-grid ui-grid-responsive ui-fluid ui-g-nopad">
-				<div class="ui-grid-row playlist__itemwrapper">
+				<div [attr.id]="playlistItem.contentDetails.videoId" [ngClass]="{'playlist__itemwrapper--active' : playlistItem.state === 'playing'}" class="ui-grid-row playlist__itemwrapper">
 					<div (tap)="playlistItemTileBehaviour(playlistItem, i)" class="ui-g-6 ui-md-3 ui-md-offset-1">
 						<div class="playlist__thumbnail">
 							<img src="{{playlistItem.snippet.thumbnails.default.url}}">
 							<div class="thumbnail__overlay">
-								<i class="fa fa-{{playlistItem.snippet.thumbnails.overlayIcon || 'play'}}" aria-hidden="true"></i>
+								<i [ngClass]="{'fa-play' : (playlistItem.state === 'notplaying' || !playlistItem.state),'fa-pause' : playlistItem.state === 'playing' }"   class="fa" aria-hidden="true"></i>
 							</div>
 						</div>
 					</div>

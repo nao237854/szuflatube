@@ -242,12 +242,21 @@ nav {
 			&:hover {
 				background: $gray-color;
 			}
+
+			&.playlist__itemwrapper--active{
+				&,&:hover{
+					background: $secondary-color;
+					color:white;
+				}
+			}
 		}
 
 	}
 
 	/deep/ .ui-datascroller-content {
 		padding: 0;
+		border:none;
+		scroll-behaviour: smooth;
 	}
 }
 
