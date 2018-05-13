@@ -118,7 +118,8 @@ export class PlaylistComponent {
     ];
 
     this.player.on('stateChange', (event) => {
-      if (this.playListBuffer.getPrevious().index !== -1) {
+      if (this.playListBuffer.getPrevious().index !== -1 && 
+      this.playListBuffer.getPrevious().index !== this.playListBuffer.getCurrent().index) {
         this.playerStatus = 'notplaying';
         this.playlist[this.playListBuffer.getPrevious().index]
         ['state'] = 'notplaying';
@@ -136,7 +137,6 @@ export class PlaylistComponent {
 
           const playlistItems = document.querySelector('.ui-datascroller-content');
           playlistItems.scrollTop -= window.innerHeight / 2 - nextItem.clientHeight;
-          // playlistItems.scrollTo(0, nextItem.offsetTop);
 
           this.progressInterval = setInterval(() => {
             this.player.getCurrentTime().then((currentTime) => {
@@ -166,7 +166,7 @@ export class PlaylistComponent {
           this.playerStatus = 'notplaying';
           clearInterval(this.progressInterval);
           this.playlist[this.playListBuffer.getCurrent().index]
-          ['state'] = 'notplaying';
+          ['state'] = 'paused';
           break;
         }
       }
