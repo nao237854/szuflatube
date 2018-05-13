@@ -255,7 +255,9 @@ export class PlaylistComponent {
 
   private shufflePlaylist() {
     const actucallState = this.playerStatus;
-    this.playlist[this.playListBuffer.getCurrent().index]['state'] = 'notplaying';
+    if (this.playListBuffer.getCurrent().index !== -1) {
+      this.playlist[this.playListBuffer.getCurrent().index]['state'] = 'notplaying';
+    }
     this.playlist = _.shuffle(this.playlist);
     this.playListBuffer.reset();
     this.playListBuffer.add({ playlistItem: this.playlist[0], index: 0 });
